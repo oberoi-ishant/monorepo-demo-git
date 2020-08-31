@@ -1,0 +1,24 @@
+{
+  "name": "@monorepo-demo/app-components",
+  "version": "0.3.1",
+  "description": "this is app with components",
+  "main": "src/index.js",
+  "license": "MIT",
+  "scripts": {
+    "test": "echo \"--------------------------- Running Test script: app-components ----------------------\" && exit 0",
+    "start": "../../node_modules/.bin/webpack-dev-server",
+    "build": "webpack --config webpack.config.js",
+    "stats": "$npm_package_config_bin/webpack --config webpack.config.js --json > stats.json"
+  },
+  "repository": {
+    "url": "https://github.com/oberoi-ishant/monorepo-demo-yarn-lerna.git",
+    "type": "git",
+    "directory": "packages/app-components"
+  },
+  "dependencies": {
+    "@monorepo-demo/app-utils": "^0.1.0",
+    "react": "^16.13.1",
+    "react-component-lazy-load": "^1.0.7",
+    "react-dom": "^16.13.1"
+  }
+}

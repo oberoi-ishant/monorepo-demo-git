@@ -1,0 +1,7 @@
+{
+  "name": "@monorepo-demo/app-utils",
+  "version": "0.1.0",
+  "description": "Utility functions",
+  "main": "utils.js",
+  "license": "MIT"
+}

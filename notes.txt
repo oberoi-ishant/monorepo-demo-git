@@ -1,0 +1,156 @@
+Steps:
+1. yarn config set workspaces-experimental true
+2. mkdir app-core && cd app-components
+3. yarn init
+4. yarn add lerna --dev
+initialize Lerna,
+which will create a lerna.json and a packages directory
+5. lerna init
+In order to set up Lerna with Yarn workspaces,
+we need to configure the lerna.json
+6. // lerna.json
+{
+  "packages": ["packages/*"],
+  "version": "independent",
+  "npmClient": "yarn",
+  "useWorkspaces": true
+}
+
+7. At this point we should only have a root package.json.
+In this root package.json we need to add workspaces and private to true.
+Setting private to true will prevent the root project from being published to NPM.
+// package.json
+{
+  "name": "my-design-system",
+  "private": true,
+  "workspaces": [
+     "packages/*"
+  ]
+}
+
+Creating a New Package
+1. cd packages
+2. mkdir app-utils && cd app-utils
+3. then we create a new package.json by running yarn init:
+yarn init
+
+4. The new name should follow our NPM Org scope ex. @my-scope-name
+It’s also important to have the new package start at a version like 0.0.0
+because once we do our first publish using Lerna,
+it’ll be published at 0.1.0 or 1.0.0.
+// package.json
+{
+  "name": "@my-scope-name/app-utils",
+  "version" : "0.0.0",
+  "main" : "index.js"
+}
+
+If you have an NPM Org Account which supports private packages,
+you can add the following to your module’s individual package.json
+"publishConfig": {
+    "access": "restricted"
+}
+
+Adding a Local Sibling Dependency to a Specific Package
+app/
+    packages/
+        app-core/
+        app-components/
+        app-utils/
+If we wanted to add the app-component as a dependency
+to our app-core and have Lerna symlink them,
+we can do so by cd into that package
+
+cd app-core
+lerna add @my-scope-name/app-components --scope=@my-scope-name/app-core
+
+This will update the package.json of @my-scope-name/app-core.
+// package.json
+{
+  "name": "@my-scope-name/app-core",
+  "version": "1.0.0",
+  "main": "index.js",
+  "dependencies": {
+    "@my-scope-name/app-components": "^1.0.0"
+  }
+}
+Now you can reference this local dependency in index.js like
+import Button from '@my-scope-name/app-components';
+
+Adding a “common” dependency to ALL packages
+Doing this is similar to the previous command.
+This would be for /packages/*.
+It doesn’t matter if they’re local sibling dependencies or from NPM
+lerna add the-dep-name
+
+If you have common dev dependencies, it’s better to specify
+them in the workspace root package.json.
+For instance, this can be dependencies
+like Jest, Husky, Storybook, Eslint, Prettier, etc
+yarn add husky --dev -W
+
+*Adding the -W flag makes it explicit
+that we’re adding the dependency to the workspace root.
+
+
+
+Removing Dependencies
+If there’s a dependency that all packages use but that you want
+to remove, Lerna has the exec command that runs an arbitrary
+command in each package. With this knowledge,
+we can use exec to remove a dependency on all packages.
+lerna exec -- yarn remove dep-name
+
+
+Running Tests
+Lerna provides the run command which will
+run an npm script in each package that contains that script.
+
+Then Lerna can execute each test script by running:
+lerna run test --stream
+*The — stream flag just provides output from the child processes
+
+
+Publishing to NPM
+Manual
+First, you need to make sure you’re logged in.
+You can verify that you’re logged in by doing
+npm whoami // myusername
+else
+npm login
+
+Once logged in you can have Lerna publish by running:
+lerna publish
+
+Lerna will prompt you to update the version numbers.
+
+
+Automatic
+Lerna supports the use of the Conventional Commits Standard to automate
+Semantic Versioning in a CI environment.
+This gives developers the ability to commit messages like
+git commit -m "fix: JIRA-1234 Fixed minor bug in foo"
+
+Then in a CI environment, the packages version’s can be updated
+and published to NPM based on commits like the one above.
+This is done by configuring your CI environment to run:
+lerna publish --conventional-commits --yes
+
+If you don’t want to pass flags, add the following to
+your lerna.json file
+"command": {
+    "publish": {
+       "conventionalCommits": true,
+       "yes": true
+    }
+}
+
+Split Versioning and Publishing
+If for whatever reason you want full control of the versioning,
+Lerna has the ability to split versioning and publishing into
+two commands.
+lerna version
+Then follow the prompts to update the individual version numbers.
+Then you can have a step that will read the latest tag
+(that was manually updated) to publish to NPM:
+lerna publish from-git --yes
