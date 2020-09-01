@@ -8,8 +8,8 @@ class MyPage extends React.Component {
   getSubscriptionAmount () {
     return Utils.currencyFormat({
       number: 99,
-      format: 'en-IN',
-      currency: 'INR'
+      format: 'en-US',
+      currency: 'USD'
     });
   }
 
