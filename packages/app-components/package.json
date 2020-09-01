@@ -1,6 +1,6 @@
 {
   "name": "@monorepo-demo/app-components",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "this is app with components",
   "main": "src/index.js",
   "license": "MIT",
@@ -16,7 +16,7 @@
     "directory": "packages/app-components"
   },
   "dependencies": {
-    "@monorepo-demo/app-utils": "^0.1.0",
+    "@monorepo-demo/app-utils": "^0.1.1",
     "react": "^16.13.1",
     "react-component-lazy-load": "^1.0.7",
     "react-dom": "^16.13.1"

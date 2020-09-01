@@ -1,6 +1,6 @@
 {
   "name": "@monorepo-demo/app-core",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "this is the application core",
   "main": "src/index.js",
   "author": "ubo.oberoi@gmail.com",
@@ -17,7 +17,7 @@
     "directory": "packages/app-core"
   },
   "dependencies": {
-    "@monorepo-demo/app-components": "^0.3.1",
+    "@monorepo-demo/app-components": "^0.4.0",
     "react": "^16.13.1",
     "react-component-lazy-load": "^1.0.7",
     "react-dom": "^16.13.1"
